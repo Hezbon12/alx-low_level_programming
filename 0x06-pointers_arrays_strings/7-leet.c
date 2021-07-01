@@ -24,5 +24,5 @@ while (s[i] == 'l' || s[i] == 'L')
 s[i] = '1';
 }
 
-return (0);
+return (s);
 }
