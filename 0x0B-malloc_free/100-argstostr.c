@@ -1,63 +1,45 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "holberton.h"
+#include <stdlib.h>
 
 /**
- * _strlen - returns the length of a string
- * @s: string
- * Return: length
+ * argstostr - Concatenates all arguments of the program into a string;
+ *             arguments are separated by a new line in the string.
+ * @ac: The number of arguments passed to the program.
+ * @av: An array of pointers to the arguments.
+ *
+ * Return: If ac == 0, av == NULL, or the function fails - NULL.
+ *         Otherwise - a pointer to the new string.
  */
-
-int _strlen(char *s)
-{
-	int len = 0;
-
-	while (*s != '\0')
-		len++, s++;
-
-	return (len);
-}
-
-/**
- * argstostr - concatenates all the arguments of your program
- * @ac: argc
- * @av: arguments
- * Return: pointer to array
- */
-
 char *argstostr(int ac, char **av)
 {
-	char *s;
-	int len = 0, i, j, k = 0;
+	char *str;
+	int arg, byte, index, size = ac;
 
-	if (ac == 0 || av == NULL) /* validate input */
+	if (ac == 0 || av == NULL)
 		return (NULL);
 
-	/* find length to malloc */
-	for (i = 0; i < ac; i++)
+	for (arg = 0; arg < ac; arg++)
 	{
-		len += _strlen(av[i]);
+		for (byte = 0; av[arg][byte]; byte++)
+			size++;
 	}
-	len += (ac + 1); /* add space for newlines and null terminator */
 
-	/* allocate memory and free if error */
-	s = malloc(len * sizeof(char));
+	str = malloc(sizeof(char) * size + 1);
 
-	if (s == NULL)
-	{
-		free(s);
+	if (str == NULL)
 		return (NULL);
-	}
 
-	/* insert each arg into *str */
-	for (i = 0; i < ac; i++)
+	index = 0;
+
+	for (arg = 0; arg < ac; arg++)
 	{
-		for (j = 0; j < _strlen(av[i]); j++)
-		{
-			s[k++] = av[i][j];
-		}
-		s[k++] = '\n';
+		for (byte = 0; av[arg][byte]; byte++)
+			str[index++] = av[arg][byte];
+
+		str[index++] = '\n';
 	}
 
-	return (s);
+	str[size] = '\0';
+
+	return (str);
 }
