@@ -1,52 +1,48 @@
 #include "lists.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
- * insert_dnodeint_at_idx - insert a new node at given position
- * @h: double pointer to head
- * @idx: index to insert into
- * @n: value to store in new node
- * Return: Address of new node, or NULL if failed
+ * insert_dnodeint_at_index - inserts a new node at a given position
+ * @h: double pointer to the beginning of the linked list
+ * @idx: index at which to insert the new node
+ * @n: data to enter into new node
+ *
+ * Return: pointer to the new node, or NULL on failure
  */
-dlistint_t *insert_dnodeint_at_idx(dlistint_t **h, unsigned int idx, int n)
+dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 {
-	unsigned int c;
-	dlistint_t *tmp, *prev, *new;
+	dlistint_t *new, *next, *current;
+	unsigned int i;
 
+	if (h == NULL)
+		return (NULL);
+	if (idx != 0)
+	{
+		current = *h;
+		for (i = 0; i < idx - 1 && current != NULL; i++)
+			current = current->next;
+		if (current == NULL)
+			return (NULL);
+	}
 	new = malloc(sizeof(dlistint_t));
 	if (new == NULL)
 		return (NULL);
 	new->n = n;
-	for (tmp = *h, c = 1; tmp && c < idx; c++, tmp = tmp->next)
-		prev = tmp;
 	if (idx == 0)
 	{
-		*h = new; new->prev = NULL;
-		new->next = (tmp == NULL) ? NULL : tmp;
-		return (new);
+		next = *h;
+		*h = new;
+		new->prev = NULL;
 	}
-	if (idx == 1)
+	else
 	{
-		prev = *h;
-		tmp = ((*h)->next == NULL) ? NULL : (*h)->next;
-		new->prev = prev; new->next = tmp; prev->next = new;
-		if (tmp)
-			tmp->prev = new;
-		return (new);
+		new->prev = current;
+		next = current->next;
+		current->next = new;
 	}
-	if (idx == c && tmp == NULL)
-	{
-		if (prev != NULL)
-		{
-			new->prev = prev; new->next = NULL;
-			prev->next = new; return (new);
-		}
-		free(new); return (NULL);
-	}
-	else if (idx != c && tmp == NULL)
-	{
-		free(new); return (NULL);
-	}
-	prev = tmp; tmp = tmp->next; new->prev = prev;
-	new->next = tmp; prev->next = new; tmp->prev = new;
+	new->next = next;
+	if (new->next != NULL)
+		new->next->prev = new;
 	return (new);
 }
