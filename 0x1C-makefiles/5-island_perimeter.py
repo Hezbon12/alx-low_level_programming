@@ -1,29 +1,31 @@
 #!/usr/bin/python3
-# @param {Integer[][]} grid
-# @return {Integer}
-def island_perimeter(grid)
-    sum = 0
-    row = grid.count
-    column = grid[0].count
-    (0..row-1).each do |r|
-        (0..column-1).each do |c|
-            if grid[r][c] == 1
-                sub = 4
-                unless r == 0
-                    sub -= 1 if grid[r-1][c] == 1
-                end
-                unless r == row-1
-                    sub -= 1 if grid[r+1][c] == 1
-                end
-                unless c == 0
-                    sub -= 1 if grid[r][c-1] == 1
-                end
-                unless c == column-1
-                    sub -= 1 if grid[r][c+1] == 1
-                end
-                sum += sub
-            end
-        end
-    end
-    sum
-end
+"""Module that calculates the perimeter of an island in a grid."""
+
+
+def num_of_water(grid, i, j):
+    """Returns the number of water a cell has in a grid."""
+
+    num = 0
+
+    if i <= 0 or not grid[i - 1][j]:
+        num += 1
+    if j <= 0 or not grid[i][j - 1]:
+        num += 1
+    if j >= len(grid[i]) - 1 or not grid[i][j + 1]:
+        num += 1
+    if i >= len(grid) - 1 or not grid[i + 1][j]:
+        num += 1
+
+    return num
+
+
+def island_perimeter(grid):
+    """Returns the perimeter of the island in grid."""
+
+    perimeter = 0
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            if grid[i][j]:
+                perimeter += num_of_water(grid, i, j)
+
+    return perimeter
