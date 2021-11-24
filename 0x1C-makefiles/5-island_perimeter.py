@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 def island_perimeter(grid)
     sum = 0
     row = grid.count
