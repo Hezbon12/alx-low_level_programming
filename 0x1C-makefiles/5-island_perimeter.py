@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# @param {Integer[][]} grid
+# @return {Integer}
 def island_perimeter(grid)
     sum = 0
     row = grid.count
